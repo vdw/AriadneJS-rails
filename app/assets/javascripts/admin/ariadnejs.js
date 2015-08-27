@@ -12,12 +12,12 @@ var AriadnesThread = [];
 
   }
 
-  // Public Methods
   AriadneJS.prototype.init = function() {
-
 
     var eventDoc, doc, body, pageX, pageY;
 
+
+    // Mouse move
     document.onmousemove = handleMouseMove;
 
     function handleMouseMove(event) {
@@ -43,21 +43,24 @@ var AriadnesThread = [];
 
     }
 
+    // Mouse click
     document.onmousedown = handleMouseDown;
 
     function handleMouseDown(event) {
       AriadnesThread.push(event.toElement + ':' + event.x + ':' + event.y);
-      updateObj( '/api/ariadnes_threads', { thread: AriadnesThread });
+      _logger( '/api/ariadnes_threads', { thread: AriadnesThread });
     }
 
+    var i = setInterval(function() {
+      AriadnesThread.push(document.documentElement.clientWidth + ':' + document.documentElement.clientHeight + ':' + pageX + ':' + pageY)
+    }, this.options.delay);
+
+    // Window status
     window.onbeforeunload = handleBeforeUnload;
 
-    var logger = setInterval(function() { AriadnesThread.push(document.documentElement.clientWidth + ':' + document.documentElement.clientHeight + ':' + pageX + ':' + pageY) }, this.options.delay);
-
-    function handleBeforeUnload(event) { clearInterval(logger); }
+    function handleBeforeUnload(event) { clearInterval(i); }
   }
 
-  // Private Methods
   function extendDefaults(source, properties) {
 
     var property;
@@ -72,7 +75,7 @@ var AriadnesThread = [];
 
   }
 
-  updateObj = function(url, params) {
+  function _logger(url, params) {
     $.ajax({
       url: url,
       type: 'POST',
@@ -84,6 +87,7 @@ var AriadnesThread = [];
   }
 
   log = new AriadneJS();
+
   log.init();
 
 }());
