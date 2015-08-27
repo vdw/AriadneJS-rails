@@ -8,10 +8,10 @@ Gem::Specification.new do |s|
   s.name        = "ariadne_js_rails"
   s.version     = AriadneJsRails::VERSION
   s.authors     = ["Dimitris Krestos"]
-  s.email       = ["dkrestos@generation-y.gr"]
-  s.homepage    = "TODO"
-  s.summary     = "TODO: Summary of AriadneJsRails."
-  s.description = "TODO: Description of AriadneJsRails."
+  s.email       = ["dkrestos@gmail.com"]
+  s.homepage    = "https://github.com/vdw"
+  s.summary     = "AriadneJsRails"
+  s.description = "AriadneJsRails"
   s.license     = "MIT"
 
   s.files = Dir["{app,config,db,lib}/**/*", "MIT-LICENSE", "Rakefile", "README.rdoc"]
@@ -19,5 +19,5 @@ Gem::Specification.new do |s|
 
   s.add_dependency "rails", "~> 4.2.3"
 
-  s.add_development_dependency "sqlite3"
+  # s.add_development_dependency "sqlite3"
 end
