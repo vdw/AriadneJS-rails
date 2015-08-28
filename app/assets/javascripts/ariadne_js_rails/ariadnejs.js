@@ -1,4 +1,5 @@
-var AriadnesThread = [];
+var AriadnesThread  = [];
+var AriadnesBrowser = navigator.appVersion;
 
 (function() {
 
@@ -48,8 +49,9 @@ var AriadnesThread = [];
     document.onmousedown = handleMouseDown;
 
     function handleMouseDown(event) {
-      AriadnesThread.push(cX, cY, pageX, pageY);
-      _logger( '/api/ariadnes_threads', { browser: navigator.appVersion, thread: AriadnesThread, event: event.type, element: event.toElement.nodeName });
+      track = serializer(cX, cY, pageX, pageY);
+      AriadnesThread.push(track);
+      _logger( '/api/ariadnes_threads', { browser: AriadnesBrowser, thread: AriadnesThread, event: event.type, element: event.toElement.nodeName });
     }
 
     var i = setInterval(function() {
@@ -84,14 +86,10 @@ var AriadnesThread = [];
   }
 
   function _logger(url, params) {
-    $.ajax({
-      url: url,
-      type: 'POST',
-      dataType: 'script',
-      data: params,
-      error: function(jqXHR, testStatus, errorThrown) { },
-      success: function(data) { }
-    });
+    xhr = new XMLHttpRequest();
+    xhr.open('POST', encodeURI(url), true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.send(JSON.stringify(params));
   }
 
   log = new AriadneJS();
