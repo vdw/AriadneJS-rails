@@ -15,7 +15,8 @@ var AriadnesThread = [];
   AriadneJS.prototype.init = function() {
 
     var eventDoc, doc, body, pageX, pageY;
-
+    var cX = document.documentElement.clientWidth;
+    var cY = document.documentElement.clientHeight;
 
     // Mouse move
     document.onmousemove = handleMouseMove;
@@ -47,12 +48,15 @@ var AriadnesThread = [];
     document.onmousedown = handleMouseDown;
 
     function handleMouseDown(event) {
-      AriadnesThread.push(event.toElement + ':' + event.x + ':' + event.y);
-      _logger( '/api/ariadnes_threads', { thread: AriadnesThread });
+      AriadnesThread.push(cX, cY, pageX, pageY);
+      _logger( '/api/ariadnes_threads', { browser: navigator.appVersion, thread: AriadnesThread, event: event.type, element: event.toElement.nodeName });
     }
 
     var i = setInterval(function() {
-      AriadnesThread.push(document.documentElement.clientWidth + ':' + document.documentElement.clientHeight + ':' + pageX + ':' + pageY)
+      track = serializer(cX, cY, pageX, pageY);
+      if ( AriadnesThread[AriadnesThread.length - 1] != track ) {
+        AriadnesThread.push(track);
+      }
     }, this.options.delay);
 
     // Window status
@@ -73,6 +77,10 @@ var AriadnesThread = [];
 
     return source;
 
+  }
+
+  function serializer(cX, cY, X, Y) {
+    return (cX + ':' + cY + ':' + X + ':' + Y);
   }
 
   function _logger(url, params) {
